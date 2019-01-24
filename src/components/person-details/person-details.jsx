@@ -3,15 +3,16 @@ import React, { Component } from 'react';
 import './person-details.css';
 import SwapiService from '../../services/swapi-service';
 import Spinner from '../spinner/spinner';
+import ErrorButton from '../error-button/error-button';
 
 export default class PersonDetails extends Component {
 
-
   swapiService = new SwapiService();
+
 
   state = {
     person:null,
-    loading:true
+    loading: true
   };
 
 
@@ -35,7 +36,7 @@ export default class PersonDetails extends Component {
     .then((person) =>{
       this.setState({
         person: person,
-      loading:false});
+        loading: false});
     })
 
   };
@@ -46,21 +47,30 @@ export default class PersonDetails extends Component {
     if (!this.state.person) {
       return <span> Select a person from a list</span>;
     }
-
-    const { id,name,gender, birthYear, eyeColor} = this.state.person;
-    const { loading } = this.state;
-    const spinner = loading ? <Spinner /> : null;
-    console.log(loading);
-    
+    const {person, loading} = this.state;
+    const spinner = loading ? <Spinner/> :<PersonView person={person} />;
+  
 
     return (
       <div className="person-details card">
       {spinner}
-        <img className="person-image"
+  
+      </div>
+    )
+
+  }
+}
+
+const PersonView = ({person}) => {
+const { id,name,gender, birthYear, eyeColor} = person;
+
+    return (
+      <React.Fragment>
+          <img className="person-image"
           src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`} />
 
         <div className="card-body">
-          <h4>{name} {this.props.personId}</h4>
+          <h4>{name} </h4>
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
               <span className="term">Gender -</span>
@@ -75,8 +85,7 @@ export default class PersonDetails extends Component {
               <span>{eyeColor.charAt(0).toUpperCase() + eyeColor.slice(1)}</span>
             </li>
           </ul>
+          <ErrorButton/>
         </div>
-      </div>
-    )
-  }
-}
+        </React.Fragment>
+    )}
