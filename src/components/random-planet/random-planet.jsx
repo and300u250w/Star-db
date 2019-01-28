@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 import SwapiService from '../../services/swapi-service';
@@ -7,6 +7,33 @@ import SwapiService from '../../services/swapi-service';
 import './random-planet.css';
 
 export default class RandomPlanet extends Component {
+
+  static defaultProps = {
+    updateInerval: 10000
+  }
+
+  // static propTypes = {
+  //   updateInerval: (props, propName,componentName) =>{
+  //     // props - this is object props
+  //     // propsName - this is name of props to which we are making this validation. in this case it'll be "updateInerval"
+  //     // componentName  - the name of component to which we are making this validation
+  //     const value = props[propName];
+  //     if (typeof value === 'number' && !isNaN(value)){
+  //       return null;
+  //     }
+  //     return new TypeError(`${componentName}: ${propName} must be a number`);
+
+  //   }
+  // }
+
+
+
+
+
+
+  static propTyes ={
+    updateInerval: PropTypes.number
+  }
 
   swapiService = new SwapiService();
 
@@ -16,8 +43,9 @@ export default class RandomPlanet extends Component {
   };
 
   componentDidMount() {
+    const {updateInerval} = this.props;
     this.updatePlanet();
-    this.interval = setInterval(this.updatePlanet, 10000);
+    this.interval = setInterval(this.updatePlanet, updateInerval);
   }
 
   componentWillUnmount() {
@@ -64,7 +92,11 @@ export default class RandomPlanet extends Component {
       </div>
     );
   }
+
+  
 }
+
+
 
 const PlanetView = ({ planet }) => {
 
